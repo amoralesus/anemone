@@ -16,8 +16,6 @@ module Anemone
     # Exception object, if one was raised during HTTP#fetch_page
     attr_reader :error
 
-    attr_reader :link_objects
-
     # OpenStruct for user-stored data
     attr_accessor :data
     # Integer response code of the page
@@ -74,6 +72,11 @@ module Anemone
       @links.uniq!
       @link_objects = @link_objects.uniq { |link| link.uri }
       @links
+    end
+
+    def link_objects
+      links
+      return @link_objects
     end
 
     #
