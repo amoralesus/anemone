@@ -61,6 +61,7 @@ module Anemone
 
       doc.search("//a[@href]").each do |a|
         u = a['href']
+        puts a.text
         next if u.nil? or u.empty?
         abs = to_absolute(u) rescue next
         @links << abs if in_domain?(abs)
