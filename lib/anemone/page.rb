@@ -69,10 +69,10 @@ module Anemone
         next if u.nil? or u.empty? or a.text.to_s.empty?
         abs = to_absolute(u) rescue next
         @links << abs if in_domain?(abs)
-        @link_objects << OpenStruct.new(:name => abs, :title => a.text.to_s.gsub(/[\n\t\r]/, "").split(" ").join(" "))
+        @link_objects << OpenStruct.new(:uri => abs, :title => a.text.to_s.gsub(/[\n\t\r]/, "").split(" ").join(" "))
       end
       @links.uniq!
-      @link_objects = @link_objects.uniq { |link| link.name }
+      @link_objects = @link_objects.uniq { |link| link.uri }
       @links
     end
 
