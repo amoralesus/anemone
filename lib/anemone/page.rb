@@ -16,6 +16,8 @@ module Anemone
     # Exception object, if one was raised during HTTP#fetch_page
     attr_reader :error
 
+    attr_reader :link_objects
+
     # OpenStruct for user-stored data
     attr_accessor :data
     # Integer response code of the page
@@ -29,6 +31,8 @@ module Anemone
     attr_accessor :referer
     # Response time of the request for this page in milliseconds
     attr_accessor :response_time
+
+
 
     #
     # Create a new page
@@ -57,16 +61,18 @@ module Anemone
     def links
       return @links unless @links.nil?
       @links = []
+      @link_objects = []
       return @links if !doc
 
       doc.search("//a[@href]").each do |a|
         u = a['href']
-        puts a.text
-        next if u.nil? or u.empty?
+        next if u.nil? or u.empty? or a.text.to_s.empty?
         abs = to_absolute(u) rescue next
         @links << abs if in_domain?(abs)
+        @link_objects << OpenStruct.new(:name => abs, :title => a.text.to_s.strip)
       end
       @links.uniq!
+      @link_objects = @link_objects.uniq { |link| link.name }
       @links
     end
 
